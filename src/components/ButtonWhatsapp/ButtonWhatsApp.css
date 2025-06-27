@@ -1,0 +1,12 @@
+.whatsapp-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.whatsapp-logo {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}

@@ -1,0 +1,9 @@
+.admin-usuarios-page {
+    padding: 20px;
+}
+
+.admin-usuarios-page h2 {
+    text-align: center;
+    margin: 0 auto;
+    color: var(--color-sexto);
+}

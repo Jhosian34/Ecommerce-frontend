@@ -1,0 +1,257 @@
+a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+li {
+    border-radius: 10px;
+    transition: 1s;
+}
+
+li:hover {
+    background-color: var(--color-secundario);
+}
+
+.main-header {
+    width: 100%;
+    background-color: var(--color-primario);
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 4px 4px 0 var(--color-primario);
+}
+
+.header-logo {
+    width: 50px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    color: var(--color-cuarto);
+    font-size: 24px;
+}
+
+.header-right img {
+    width: 30px;
+    height: 30px;
+    display: none;
+
+}
+
+.main-nav {
+    position: absolute;
+    top: 72px;
+    left: -250px;
+    width: 250px;
+    height: calc(100vh - 72px);
+    background-color: var(--color-primario);
+    transition: left 0.3s;
+    box-shadow: 0 -6px 2px var(--color-primario);
+    border-radius: 0 5px;
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    height: 100%;
+    justify-content: flex-start;
+
+    padding-left: 16px;
+    gap: 10px;
+    text-transform: uppercase;
+
+}
+
+.nav-list .nav-item {
+    display: flex;
+    align-items: center;
+
+}
+
+.nav-list .nav {
+    color: var(--color-cuarto);
+    padding: 10px;
+    transition: all 0.5s ease;
+    font-weight: 500;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+}
+
+.icon {
+    display: none;
+}
+
+
+.nav-list .nav i {
+    margin-right: 10px;
+
+}
+
+.cart-icon-container {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--color-secundario);
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.burger {
+    color: var(--color-cuarto);
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.burger-line {
+    width: 20px;
+    height: 3px;
+    background-color: var(--color-cuarto);
+    position: relative;
+}
+
+.burger-line::before,
+.burger-line::after {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 3px;
+    background-color: var(--color-cuarto);
+    position: absolute;
+    transform: translateY(-6px);
+    transition: transform 0.4s
+}
+
+.burger-line::after {
+    transform: translateY(6px);
+}
+
+.burger-check {
+    display: none;
+}
+
+.burger-check:checked~.header-left .main-nav {
+    left: 0;
+}
+
+.burger-check:checked~.burger .burger-line {
+    background-color: transparent;
+}
+
+.burger-check:checked+.header-left .main-nav {
+    left: 0;
+}
+
+.burger-check:checked~.burger .burger-line::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.burger-check:checked~.burger .burger-line::after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
+
+@media screen and (width >=768px) {
+
+    .main-header {
+
+        .burger {
+            display: none;
+        }
+
+        .main-nav {
+            position: static;
+            height: auto;
+            width: auto;
+            background-color: var(--color-primario);
+
+            .nav-list {
+                flex-direction: row;
+            }
+
+        }
+
+
+        .header-right {
+            img {
+                display: block;
+            }
+        }
+    }
+
+    .section-info {
+        flex-direction: row;
+
+        .info-img-container {
+            order: 0;
+        }
+    }
+
+    .main-footer {
+        flex-direction: row;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    li:hover {
+        background-color: transparent !important;
+    }
+
+    .nav-item {
+        border-bottom: 2px solid var(--color-cuarto);
+    }
+
+    .nav-list {
+        margin-top: 20px;
+    }
+
+    .icon {
+        display: inline-block;
+        font-size: 20px;
+    }
+
+
+    .main-footer {
+        font-size: 1rem;
+    }
+
+    .whatsapp-container {
+        left: 20px;
+    }
+
+}
+
+@media screen and (min-width: 768px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}
