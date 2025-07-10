@@ -62,6 +62,7 @@ export default function Header() {
                     </nav>
                 </div>
                 <div className="header-right">
+                    <NavLink to="/Login" className="nav">Login</NavLink>
                     <div className="cart-icon-container">
                         <FontAwesomeIcon icon={faCartShopping} size='lg' className="footer-icon" />
                         <span className="cart-badge">1</span>

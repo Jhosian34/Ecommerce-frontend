@@ -39,7 +39,7 @@ export default function Footer() {
 
             <section>
                 <h3><strong>DjSoluciones</strong></h3>
-                <div class="logo-footer">
+                <div className="logo-footer">
                     <img className="header-logo" src={logo} alt="logo-djsoluciones" />
                 </div>
                 <p>2025 - Copyright © DjSoluciones.</p>

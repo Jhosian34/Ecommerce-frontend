@@ -14,6 +14,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminUser from "./pages/AdminUser/AdminUser";
 import ProductInfo from "./components/ProductInfo/ProductInfo";
 import ButtonWhatsApp from "./components/ButtonWhatsapp/ButtonWhatsapp";
+import Login from "./pages/Login/Login";
 
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/AdminUser" element={<AdminUser />} />
                 <Route path="/ProductInfo/:id" element={<ProductInfo />} />
+                <Route path="/Login" element= {<Login />} />
 
                 <Route path="*" element={<h1>Not Found Page</h1>} />
 
