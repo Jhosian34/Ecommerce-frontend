@@ -15,6 +15,7 @@ import AdminUser from "./pages/AdminUser/AdminUser";
 import ProductInfo from "./components/ProductInfo/ProductInfo";
 import ButtonWhatsApp from "./components/ButtonWhatsapp/ButtonWhatsapp";
 import Login from "./pages/Login/Login";
+import AdminGuard from "./shared/guard/AdminGuard";
 
 
 export default function App() {
@@ -26,21 +27,31 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/Products" element={<Products />} />
                 <Route path="/AboutUs" element={<AboutUs />} />
-                <Route path="/AdminProducts" element={<AdminProducts />} />
+
+                <Route path="/AdminProducts" element={
+                    <AdminGuard>
+                        <AdminProducts />
+                    </AdminGuard>
+                } />
+
                 <Route path="/AddProduct" element={<AddProduct />} />
                 <Route path="/EditProduct/:id" element={<EditProduct />} />
                 <Route path="/Contact" element={<Contact />} />
                 <Route path="/ProductDetail/:id" element={<ProductDetail />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/AdminUser" element={<AdminUser />} />
+                <Route path="/AdminUser" element={
+                    <AdminGuard>
+                        <AdminUser />
+                    </AdminGuard>
+                } />
                 <Route path="/ProductInfo/:id" element={<ProductInfo />} />
-                <Route path="/Login" element= {<Login />} />
+                <Route path="/Login" element={<Login />} />
 
                 <Route path="*" element={<h1>Not Found Page</h1>} />
 
             </Routes>
         </main>
-        <ButtonWhatsApp/>
+        <ButtonWhatsApp />
         <Footer />
     </>
 }

@@ -177,6 +177,31 @@ li:hover {
     top: 0;
 }
 
+.btn-logout {
+    font-family: inherit;
+    background: transparent;
+    border: none;
+    color: var(--color-cuarto);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    text-transform: capitalize;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-logout:hover {
+    background-color: var(--color-secundario);
+    color: white;
+}
+.name-login{
+    font-size: 1.2rem;
+    font-weight:500;
+    text-transform: capitalize;
+}
+
 
 @media screen and (width >=768px) {
 

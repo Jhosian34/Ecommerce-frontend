@@ -2,18 +2,19 @@ import React from 'react'
 import axios from 'axios';
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2';
-
+import { useNavigate } from 'react-router-dom';
+import './Login.css'
 
 const API_URL = import.meta.env.VITE_SERVER_API;
 
 
 export default function Login() {
-
+const navigate = useNavigate();
     async function login(authData) {
         console.log(authData)
-        console.log("API_URL:", API_URL)
         try {
-            const {data} = await axios.post(`${API_URL}/login`, authData)
+
+            const { data } = await axios.post(`${API_URL}/login`, authData)
 
             console.log(data)
             Swal.fire({
@@ -21,6 +22,10 @@ export default function Login() {
                 title: 'Inicio de sesión exitoso',
                 text: '¡Bienvenido de nuevo!',
             });
+            navigate('/');
+            localStorage.setItem("users", JSON.stringify(data.users))
+            localStorage.setItem("token", data.token )
+            
         } catch (error) {
             console.log(error)
             Swal.fire({
@@ -32,27 +37,21 @@ export default function Login() {
     }
     const { register, handleSubmit } = useForm();
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit(login)}>
-                <p>
-                    <input
-                        type="email"
-                        placeholder="Correo electrónico"
-                        {...register("email", { required: true })}
-                    />
-                </p>
-                <p>
-                    <input
-                        type="password"
-                        placeholder="Contraseña"
-                        {...register("password", { required: true })}
-                    />
-                </p>
-                <button className='btn' type='submit'>
-                    Iniciar Sesión
-                </button>
-            </form>
-        </div>
+        <div className="login-container">
+    <h2>Inicio de Sesión</h2>
+    <form onSubmit={handleSubmit(login)}>
+        <input
+            type="email"
+            placeholder="Correo electrónico"
+            {...register("email", { required: true })}
+        />
+        <input
+            type="password"
+            placeholder="Contraseña"
+            {...register("password", { required: true })}
+        />
+        <button className="btn" type="submit">Iniciar Sesión</button>
+    </form>
+</div>
     )
 }

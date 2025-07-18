@@ -68,16 +68,26 @@ export default function AddProduct({ onProductAdded }) {
         <form onSubmit={handleSubmit} className='product-form'>
             <h2>Nuevo Producto</h2>
             {['name', 'price', 'date', 'image', 'description'].map(key => (
-                <div key={key}>
-                    <label>{etiquetas[key]}:</label>
-                    <input
-                        name={key}
-                        value={form[key]}
-                        onChange={handleChange}
-                        type={key === 'date' ? 'date' : 'text'}
-                    />
-                </div>
-            ))}
+    <div key={key}>
+        <label>{etiquetas[key]}:</label>
+        {key === 'description' ? (
+            <textarea
+                name={key}
+                value={form[key]}
+                onChange={handleChange}
+                rows={4}
+                style={{ resize: 'vertical', width: '100%' }}
+            />
+        ) : (
+            <input
+                name={key}
+                value={form[key]}
+                onChange={handleChange}
+                type={key === 'date' ? 'date' : 'text'}
+            />
+        )}
+    </div>
+))}
             <div>
                 <label>Características (separadas por coma):</label>
                 <input name="characteristics" value={form.characteristics} onChange={handleChange} type="text" />
