@@ -1,18 +1,23 @@
 import { useNavigate, NavLink } from 'react-router-dom';
 import './Header.css';
 import logo from '../../assets/images/logo2.png';
-import user from '../../assets/images/user-profile.png';
+import userImg from '../../assets/images/user-profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBox, faUsersCog, faUserPlus, faPhoneAlt, faInfoCircle, faCartShopping, faUserShield
+import {
+    faHome, faBox, faUsersCog, faUserPlus, faPhoneAlt, faInfoCircle, faCartShopping, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+
+import { useCart } from '../../components/context/CartContext.jsx';
 
 
 export default function Header() {
 
-const navigate = useNavigate();
-const users = JSON.parse(localStorage.getItem('users'))
-const handleLogout = () => {
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const { totalItems, setCart } = useCart();
+    const handleLogout = () => {
         Swal.fire({
             title: '¿Estás seguro?',
             text: '¿Deseas cerrar sesión?',
@@ -23,7 +28,10 @@ const handleLogout = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('token');
-                localStorage.removeItem('users');
+                localStorage.removeItem('user');
+                localStorage.removeItem("cart");
+
+                setCart([]);
 
                 Swal.fire({
                     icon: 'success',
@@ -61,26 +69,26 @@ const handleLogout = () => {
                                     <FontAwesomeIcon icon={faBox} className="footer-icon hide-on-mobile" /> Productos
                                 </NavLink>
                             </li>
-                            {users?.role ==='admin' && (
-                            <li className="nav-item">
-                                <NavLink to="/AdminProducts" className="nav">
-                                    <FontAwesomeIcon icon={faUsersCog} className="footer-icon hide-on-mobile" /> Admin. Productos
-                                </NavLink>
-                            </li>
+                            {user?.role === 'admin' && (
+                                <li className="nav-item">
+                                    <NavLink to="/AdminProducts" className="nav">
+                                        <FontAwesomeIcon icon={faUsersCog} className="footer-icon hide-on-mobile" /> Admin. Productos
+                                    </NavLink>
+                                </li>
                             )}
                             <li className="nav-item">
                                 <NavLink to="/Register" className="nav">
                                     <FontAwesomeIcon icon={faUserPlus} className="footer-icon hide-on-mobile" /> Registro
                                 </NavLink>
                             </li>
-                            {users?.role ==='admin' && (
-                            <li className="nav-item">
-                                <NavLink to="/AdminUser" className="nav">
-                                    <FontAwesomeIcon icon={faUserShield} className="footer-icon hide-on-mobile" /> Admin. Usuarios
-                                </NavLink>
-                            </li>
+                            {user?.role === 'admin' && (
+                                <li className="nav-item">
+                                    <NavLink to="/AdminUser" className="nav">
+                                        <FontAwesomeIcon icon={faUserShield} className="footer-icon hide-on-mobile" /> Admin. Usuarios
+                                    </NavLink>
+                                </li>
                             )}
-                            
+
                             <li className="nav-item">
                                 <NavLink to="/contact" className="nav">
                                     <FontAwesomeIcon icon={faPhoneAlt} className="footer-icon hide-on-mobile" /> Contacto
@@ -97,18 +105,18 @@ const handleLogout = () => {
                 </div>
                 <div className="header-right">
 
-                    {users ? (
+                    {user ? (
                         <button onClick={handleLogout} className="btn-logout">Logout</button>) : (
-                        <NavLink to="/Login" className="nav">Login</NavLink>
-                        )}
-                    {users && (
-                        <div className='name-login'>{users.name}</div>
+                        <NavLink to="/Login" className="btn-login">Login</NavLink>
                     )}
-                    <div className="cart-icon-container">
-                        <FontAwesomeIcon icon={faCartShopping} size='lg' className="footer-icon" />
-                        <span className="cart-badge">1</span>
-                    </div>
-                    <img className="header-logo" src={user} alt="user-profile" />
+                    {user && (
+                        <div className='name-login'>{user.name}</div>
+                    )}
+                    <NavLink to="/cart" className="cart-icon-container" style={{ position: 'relative' }}>
+                        <FontAwesomeIcon icon={faCartShopping} size="lg" className="footer-icon" />
+                        {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+                    </NavLink>
+                    <img className="header-logo" src={userImg} alt="user-profile" />
                 </div>
             </header>
         </>

@@ -15,7 +15,7 @@
 .product-list-container {
     flex: 2;
     min-width: 500px;
-    overflow-x: auto;
+    overflow-x: visible;
 }
 
 .product-table {
@@ -152,8 +152,12 @@ ul {
     list-style-type: none;
     padding-left: 0;
     margin-left: 0;
-    
-    
+
+
 }
 
-
+@media (max-width: 768px) {
+    .product-list-container {
+        overflow-x: auto;
+    }
+}

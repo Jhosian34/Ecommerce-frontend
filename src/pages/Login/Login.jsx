@@ -9,23 +9,23 @@ const API_URL = import.meta.env.VITE_SERVER_API;
 
 
 export default function Login() {
-const navigate = useNavigate();
+    const navigate = useNavigate();
     async function login(authData) {
         console.log(authData)
         try {
 
-            const { data } = await axios.post(`${API_URL}/login`, authData)
+            const { data } = await axios.post(`${API_URL}/users/login`, authData);
+            
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("token", data.token);
 
-            console.log(data)
             Swal.fire({
                 icon: 'success',
                 title: 'Inicio de sesión exitoso',
                 text: '¡Bienvenido de nuevo!',
             });
+
             navigate('/');
-            localStorage.setItem("users", JSON.stringify(data.users))
-            localStorage.setItem("token", data.token )
-            
         } catch (error) {
             console.log(error)
             Swal.fire({
@@ -38,20 +38,20 @@ const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
     return (
         <div className="login-container">
-    <h2>Inicio de Sesión</h2>
-    <form onSubmit={handleSubmit(login)}>
-        <input
-            type="email"
-            placeholder="Correo electrónico"
-            {...register("email", { required: true })}
-        />
-        <input
-            type="password"
-            placeholder="Contraseña"
-            {...register("password", { required: true })}
-        />
-        <button className="btn" type="submit">Iniciar Sesión</button>
-    </form>
-</div>
+            <h2>Inicio de Sesión</h2>
+            <form onSubmit={handleSubmit(login)}>
+                <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    {...register("email", { required: true })}
+                />
+                <input
+                    type="password"
+                    placeholder="Contraseña"
+                    {...register("password", { required: true })}
+                />
+                <button className="btn" type="submit">Iniciar Sesión</button>
+            </form>
+        </div>
     )
 }

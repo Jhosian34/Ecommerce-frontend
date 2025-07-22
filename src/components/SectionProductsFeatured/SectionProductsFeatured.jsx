@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './SectionProducts.css';
-import { useEffect, useState } from 'react';
 import ProductCard from '../ProductCard/ProductCard';
+import '../SectionProducts/SectionProducts.css';
 
-export default function SectionProducts({ limit }) {
+export default function SectionProductsFeatured() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -15,17 +15,14 @@ export default function SectionProducts({ limit }) {
                 console.log('Error fetching products:', error);
             }
         }
-
         getProducts();
     }, []);
-
-    const displayedProducts = limit ? products.slice(0, limit) : products;
 
     return (
         <section className="featured-section">
             <h2>Productos Destacados</h2>
             <div className="container">
-                {displayedProducts.map((product) => (
+                {products.slice(0, 8).map(product => (
                     <ProductCard key={product._id || product.id} product={product} />
                 ))}
             </div>

@@ -15,6 +15,7 @@ import AdminUser from "./pages/AdminUser/AdminUser";
 import ProductInfo from "./components/ProductInfo/ProductInfo";
 import ButtonWhatsApp from "./components/ButtonWhatsapp/ButtonWhatsapp";
 import Login from "./pages/Login/Login";
+import CartDisplay from './components/context/Cart';
 import AdminGuard from "./shared/guard/AdminGuard";
 
 
@@ -46,6 +47,7 @@ export default function App() {
                 } />
                 <Route path="/ProductInfo/:id" element={<ProductInfo />} />
                 <Route path="/Login" element={<Login />} />
+                <Route path="/cart" element={<CartDisplay />} />
 
                 <Route path="*" element={<h1>Not Found Page</h1>} />
 

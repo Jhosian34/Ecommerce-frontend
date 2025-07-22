@@ -56,3 +56,30 @@
     background-color: var(--color-secundario);
 }
 
+.product-form select,
+.product-form input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.product-form select:focus,
+.product-form input[type="file"]:focus {
+    border-color: var(--color-primario);
+    outline: none;
+    box-shadow: 0 0 5px var(--color-primario);
+    
+}
+
+.product-form input[type="file"].styled-file-input {
+    background-color: var(--color-cuarto);
+    color: var(--color-primario);
+}
+
+.product-form input[type="file"].styled-file-input:hover {
+    background-color: #f5f5f5;
+}

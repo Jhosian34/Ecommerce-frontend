@@ -192,14 +192,30 @@ li:hover {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+.btn-login {
+    font-family: inherit;
+    font-size: 1.2rem;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: none;
+    text-shadow: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
 .btn-logout:hover {
     background-color: var(--color-secundario);
     color: white;
 }
-.name-login{
+
+.name-login {
     font-size: 1.2rem;
-    font-weight:500;
+    font-weight: 500;
     text-transform: capitalize;
+
 }
 
 
