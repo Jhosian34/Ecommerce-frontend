@@ -17,6 +17,7 @@ import ButtonWhatsApp from "./components/ButtonWhatsapp/ButtonWhatsapp";
 import Login from "./pages/Login/Login";
 import CartDisplay from './components/context/Cart';
 import AdminGuard from "./shared/guard/AdminGuard";
+import Profile from "./pages/Profile/Profile"
 
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
 
                 <Route path="/AddProduct" element={<AddProduct />} />
                 <Route path="/EditProduct/:id" element={<EditProduct />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/Contact" element={<Contact />} />
                 <Route path="/ProductDetail/:id" element={<ProductDetail />} />
                 <Route path="/register" element={<Register />} />

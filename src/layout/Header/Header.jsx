@@ -116,7 +116,11 @@ export default function Header() {
                         <FontAwesomeIcon icon={faCartShopping} size="lg" className="footer-icon" />
                         {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
                     </NavLink>
-                    <img className="header-logo" src={userImg} alt="user-profile" />
+                    <img
+                        className="header-logo"
+                        src={user?.image ? user.image : userImg}
+                        alt="user-profile"
+                    />
                 </div>
             </header>
         </>
