@@ -1,124 +1,139 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './RegisterForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import userImg from '../../assets/images/user-profile.png';
 
 export default function Register() {
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+    const [avatar, setAvatar] = useState(null);
+    const inputFileRef = useRef();
+
     const onSubmit = async (data) => {
+        const formData = new FormData();
+
+
+        formData.append('name', data.name);
+        formData.append('email', data.email);
+        formData.append('password', data.password);
+        formData.append('fecha_nacimiento', data.fecha_nacimiento);
+        formData.append('province', data.province);
+        formData.append('comment', data.comment || '');
+
+        if (avatar) formData.append('avatar', avatar);
+
         try {
-            const userData = { ...data, createdAt: new Date().toISOString() };
-            await axios.post('https://68476e0dec44b9f3493d0fd0.mockapi.io/users', userData);
-            Swal.fire({
-                icon: 'success',
-                title: 'Registro Exitoso ✔',
-                showConfirmButton: false,
-                timer: 3000
+            await axios.post('http://localhost:3000/users/register', formData, {
+                headers: {
+                    'Accept': 'application/json',
+                }
             });
+            Swal.fire({ icon: 'success', title: 'Registro Exitoso ✔', showConfirmButton: false, timer: 2000 });
             reset();
+            setAvatar(null);
         } catch (err) {
             console.error('Error al registrar usuario:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al registrar usuario',
-                text: err.message || 'Algo salió mal'
-            });
+            Swal.fire({ icon: 'error', title: 'Error al registrar usuario', text: err?.response?.data?.message || err.message });
         }
     };
+
+    const handleAvatarClick = () => inputFileRef.current?.click();
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) setAvatar(file);
+    };
+
     return (
         <main className="main-container">
             <h2>Registro</h2>
             <form className="formulario" onSubmit={handleSubmit(onSubmit)}>
-                <div className="input-group">
-                    <label htmlFor="nomb">Nombre Completo</label>
+                
+            
+                <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                    <img
+                        src={avatar ? URL.createObjectURL(avatar) : userImg}
+                        alt="Avatar"
+                        onClick={handleAvatarClick}
+                        style={{ width: 120, height: 120, borderRadius: '50%', cursor: 'pointer', border: '2px solid #ccc' }}
+                        title="Haz clic para seleccionar una imagen"
+                    />
                     <input
-                        id="nomb"
-                        placeholder="Escribe tu Nombre y Apellido"
-                        {...register('name', {
-                            required: 'Requerido',
-                            minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-                        })}
+                        ref={inputFileRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                </div>
+
+                <div className="input-group">
+                    <label>Nombre Completo</label>
+                    <input
+                        {...register('name', { required: 'Requerido', minLength: { value: 2, message: 'Mínimo 2 caracteres' } })}
                     />
                     {errors.name && <p className="error">{errors.name.message}</p>}
                 </div>
+
                 <div className="input-group">
-                    <label htmlFor="correo">Correo Electrónico</label>
+                    <label>Correo Electrónico</label>
                     <input
-                        id="correo"
                         type="email"
-                        placeholder="example@gmail.com"
                         {...register('email', {
                             required: 'Requerido',
-                            pattern: {
-                                value: /^[A-Za-z0-9._+\-']+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/,
-                                message: 'Email inválido'
-                            }
+                            pattern: { value: /^[\w.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, message: 'Email inválido' }
                         })}
                     />
                     {errors.email && <p className="error">{errors.email.message}</p>}
                 </div>
-                <div className="input-group">
-                    <label htmlFor="contraseña">Contraseña</label>
-                    <input
-                        id="contraseña"
-                        type={showPassword ? "text" : "password"}
-                        {...register('pass', {
-                            required: 'Requerido',
-                            minLength: { value: 8, message: 'Mínimo 8 caracteres' },
-                            maxLength: { value: 16, message: 'Máximo 16 caracteres' },
-                            pattern: {
-                                value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
-                                message: 'Debe incluir mayúscula, minúscula y número'
-                            }
-                        })}
-                    />
-                    <span
-                        className="eye-icon"
-                        onClick={() => setShowPassword(prev => !prev)}
-                    >
-                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                    </span>
-                    {errors.pass && <p className="error">{errors.pass.message}</p>}
-                </div>
 
                 <div className="input-group">
-                    <label htmlFor="repite-contraseña">Repetir Contraseña</label>
-                    <input
-                        id="repite-contraseña"
-                        type={showRepeatPassword ? "text" : "password"}
-                        {...register('pass_repeat', {
-                            required: 'Requerido',
-                            validate: (value) =>
-                                value === watch('pass') || 'Las contraseñas no coinciden'
-                        })}
-                    />
-                    <span
-                        className="eye-icon"
-                        onClick={() => setShowRepeatPassword(prev => !prev)}
-                    >
-                        <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
-                    </span>
+                    <label>Contraseña</label>
+                    <div className="password-wrapper">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            {...register('password', {
+                                required: 'Requerido',
+                                minLength: { value: 8, message: 'Mínimo 8 caracteres' },
+                                pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: 'Debe incluir mayúscula, minúscula y número' }
+                            })}
+                        />
+                        <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </span>
+                    </div>
+                    {errors.password && <p className="error">{errors.password.message}</p>}
+                </div>
+                <div className="input-group">
+                    <label>Repetir Contraseña</label>
+                    <div className="password-wrapper">
+                        <input
+                            type={showRepeatPassword ? 'text' : 'password'}
+                            {...register('pass_repeat', {
+                                required: 'Requerido',
+                                validate: (v) => v === watch('password') || 'Las contraseñas no coinciden'
+                            })}
+                        />
+                        <span className="eye-icon" onClick={() => setShowRepeatPassword(!showRepeatPassword)}>
+                            <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
+                        </span>
+                    </div>
                     {errors.pass_repeat && <p className="error">{errors.pass_repeat.message}</p>}
                 </div>
                 <div className="input-group">
-                    <label htmlFor="fecha-nacimiento">Fecha de Nacimiento</label>
-                    <input
-                        id="fecha-nacimiento"
-                        type="date"
-                        {...register('fecha_nacimiento', { required: 'Requerido' })}
-                    />
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" {...register('fecha_nacimiento', { required: 'Requerido' })} />
                     {errors.fecha_nacimiento && <p className="error">{errors.fecha_nacimiento.message}</p>}
                 </div>
-
                 <div className="input-group">
-                    <label htmlFor="provincia">Provincia</label>
-                    <select id="provincia" {...register('province', { required: 'Requerido' })}>
-                        <option value="">Seleccione</option>
+                    <label>Provincia</label>
+                    <select {...register('province', { required: 'Requerido' })}>
+                        <option value="">Seleccioná</option>
                         <option value="buenos_aires">Buenos Aires</option>
                         <option value="catamarca">Catamarca</option>
                         <option value="chaco">Chaco</option>
@@ -142,19 +157,15 @@ export default function Register() {
                         <option value="santiago_del_estero">Santiago del Estero</option>
                         <option value="tierra_del_fuego">Tierra del Fuego</option>
                         <option value="tucuman">Tucumán</option>
+                        <option value="caba">Ciudad Autónoma de Buenos Aires (CABA)</option>
                     </select>
                     {errors.province && <p className="error">{errors.province.message}</p>}
                 </div>
+
                 <div className="input-group">
-                    <label htmlFor="comentario">Observaciones</label>
+                    <label>Observaciones</label>
                     <textarea
-                        id="comentario"
-                        cols="30"
-                        rows="6"
-                        {...register('comment', {
-                            minLength: { value: 20, message: 'Mínimo 20 caracteres' },
-                            maxLength: { value: 300, message: 'Máximo 300 caracteres' }
-                        })}
+                        {...register('comment', { minLength: { value: 20, message: 'Mínimo 20 caracteres' } })}
                     ></textarea>
                     {errors.comment && <p className="error">{errors.comment.message}</p>}
                 </div>

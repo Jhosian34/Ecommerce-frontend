@@ -15,9 +15,15 @@ export default function Login() {
         try {
 
             const { data } = await axios.post(`${API_URL}/users/login`, authData);
-            
+
             localStorage.setItem("user", JSON.stringify(data.user));
             localStorage.setItem("token", data.token);
+
+            const { data: currentUserData } = await axios.get(`${API_URL}/users/me`, {
+                headers: { Authorization: `Bearer ${data.token}` }
+            });
+
+            localStorage.setItem("user", JSON.stringify(currentUserData.user));
 
             Swal.fire({
                 icon: 'success',
