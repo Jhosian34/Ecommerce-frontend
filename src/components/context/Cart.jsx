@@ -33,6 +33,58 @@ export default function Cart() {
         return <p className="empty-cart-message">El carrito está vacío.</p>;
     }
 
+    const handleCheckout = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await fetch("http://localhost:3000/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                user: user._id,
+                items: cart.map(item => ({
+                    productId: item._id || item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image
+                })),
+                total: totalPrice,
+                status: "pending"
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(JSON.stringify(error));
+        }
+
+        const result = await response.json();
+        Swal.fire("¡Compra realizada!", "Tu orden ha sido registrada con éxito.", "success");
+        clearCart();
+
+        const ordersResponse = await fetch("http://localhost:3000/orders", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!ordersResponse.ok) {
+            throw new Error("Error al obtener las órdenes");
+        }
+
+        const allOrders = await ordersResponse.json();
+        console.log("Órdenes desde la base de datos:", allOrders);
+
+    } catch (error) {
+        console.error("Error al procesar la compra:", error);
+        Swal.fire("Error", "Hubo un problema al procesar la compra.", "error");
+    }
+};
+
     return (
         <div className="cart-container">
             <h2>Carrito de Compras</h2>
@@ -72,6 +124,14 @@ export default function Cart() {
 
             <button className="clear-cart-btn" onClick={handleClearCart} title="Vaciar carrito">
                 <FontAwesomeIcon icon={faTrashRestore} /> Vaciar carrito
+            </button>
+
+            <button
+                className="checkout-btn"
+                onClick={handleCheckout}
+                title="Confirmar compra"
+            >
+                Confirmar compra
             </button>
 
             <Link to="/" className="back-home-link">
