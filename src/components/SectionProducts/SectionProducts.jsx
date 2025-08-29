@@ -10,6 +10,7 @@ export default function SectionProducts({ limit }) {
         async function getProducts() {
             try {
                 const response = await axios.get('https://ecommerce-backend-663o.onrender.com/products');
+                
                 setProducts(response.data.products);
             } catch (error) {
                 console.log('Error fetching products:', error);

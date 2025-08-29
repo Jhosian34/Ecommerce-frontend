@@ -12,6 +12,8 @@ export default function Login() {
     const navigate = useNavigate();
     async function login(authData) {
         console.log(authData)
+        console.log('API_URL:', API_URL);
+        console.log('Datos para login:', authData);
         try {
 
             const { data } = await axios.post(`${API_URL}/users/login`, authData);

@@ -21,7 +21,7 @@ export default function EditProduct() {
     const [imageFile, setImageFile] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/products/${id}`)
+        axios.get(`https://ecommerce-backend-663o.onrender.com/products/${id}`)
             .then(res => {
                 const data = res.data.product;
                 setForm({

@@ -30,7 +30,7 @@ export default function ProductInfo({
                             src={
                                 image?.startsWith('http')
                                     ? image
-                                    : `http://localhost:3000/uploads/products/${image}`
+                                    : `https://ecommerce-backend-663o.onrender.com/uploads/products/${image}`
                             }
                             alt={name}
                             onError={(e) => {

@@ -9,7 +9,7 @@ export default function SectionProductsFeatured() {
     useEffect(() => {
         async function getProducts() {
             try {
-                const response = await axios.get('http://localhost:3000/products');
+                const response = await axios.get('https://ecommerce-backend-663o.onrender.com/products');
                 setProducts(response.data.products);
             } catch (error) {
                 console.log('Error fetching products:', error);

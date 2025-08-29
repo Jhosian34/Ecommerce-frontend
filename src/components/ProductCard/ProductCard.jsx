@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
 
     const imageUrl = product.image?.startsWith('http')
         ? product.image
-        : `http://localhost:3000/uploads/products/${product.image}`;
+        :`https://ecommerce-backend-663o.onrender.com/uploads/${product.image}`;
 
     const handleAddToCart = () => {
         addToCart({ ...product, quantity: 1 });

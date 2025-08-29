@@ -23,7 +23,7 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/products', {
+      const response = await axios.get('https://ecommerce-backend-663o.onrender.com/products', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -49,7 +49,7 @@ export default function AdminProducts() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3000/products/${id}`, {
+          .delete(`https://ecommerce-backend-663o.onrender.com/products/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
