@@ -7,7 +7,6 @@ import './Login.css'
 
 const API_URL = import.meta.env.VITE_SERVER_API;
     console.log('API_URL:', API_URL);
-    console.log('Datos para login:', authData);
 
 export default function Login() {
     const navigate = useNavigate();
