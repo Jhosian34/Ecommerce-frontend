@@ -3,21 +3,19 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../components/context/UserContext'; // ajusta ruta si es necesario
 import './Login.css'
 
 const API_URL = import.meta.env.VITE_SERVER_API;
-    console.log('API_URL:', API_URL);
 
 export default function Login() {
     const navigate = useNavigate();
-    async function login(authData) {
-        console.log(authData)
-        
-        try {
+    const { updateUser } = useUser();
 
+    async function login(authData) {
+        try {
             const { data } = await axios.post(`${API_URL}/users/login`, authData);
 
-            localStorage.setItem("user", JSON.stringify(data.user));
             localStorage.setItem("token", data.token);
 
             const { data: currentUserData } = await axios.get(`${API_URL}/users/me`, {
@@ -25,6 +23,8 @@ export default function Login() {
             });
 
             localStorage.setItem("user", JSON.stringify(currentUserData.user));
+
+            updateUser(currentUserData.user);
 
             Swal.fire({
                 icon: 'success',
@@ -34,7 +34,6 @@ export default function Login() {
 
             navigate('/');
         } catch (error) {
-            console.log(error)
             Swal.fire({
                 icon: 'error',
                 title: 'Error al iniciar sesión',
@@ -42,7 +41,9 @@ export default function Login() {
             });
         }
     }
+
     const { register, handleSubmit } = useForm();
+
     return (
         <div className="login-container">
             <h2>Inicio de Sesión</h2>
