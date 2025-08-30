@@ -27,6 +27,7 @@ export function UserProvider({ children }) {
 
     const logoutUser = () => {
         setUser(null);
+        localStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('cart');
         
