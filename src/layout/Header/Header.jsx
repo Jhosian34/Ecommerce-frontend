@@ -14,7 +14,7 @@ import { useUser } from '../../components/context/UserContext';
 export default function Header() {
     const inputFileRef = useRef(null);
     const navigate = useNavigate();
-    const { user: logoutUser, updateUser, currentUser } = useUser();
+    const { user: currentUser, updateUser, logoutUser } = useUser();
     const { totalItems, setCart } = useCart();
 
     const handleLogout = () => {
