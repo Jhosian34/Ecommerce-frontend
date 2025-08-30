@@ -9,7 +9,7 @@ export default function SectionProducts({ limit }) {
     useEffect(() => {
         async function getProducts() {
             try {
-                const response = await axios.get('https://ecommerce-backend-663o.onrender.com/products');
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_API}/products`);
                 
                 setProducts(response.data.products);
             } catch (error) {

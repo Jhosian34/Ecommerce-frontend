@@ -15,11 +15,14 @@ export default function ProductCard({ product }) {
 
     const imageUrl = product.image?.startsWith('http')
         ? product.image
-        :`https://ecommerce-backend-663o.onrender.com/uploads/${product.image}`;
+        :`${import.meta.env.VITE_SERVER_API}/uploads/${product.image}`;
 
     const handleAddToCart = () => {
         addToCart({ ...product, quantity: 1 });
     };
+    const handleAddToFavorites = () => {
+    console.log(`Añadir a favoritos: ${product.name}`);
+};
 
     return (
         <article className="card">
@@ -32,7 +35,7 @@ export default function ProductCard({ product }) {
                     <button title="Comprar" onClick={handleAddToCart}>
                         <FontAwesomeIcon icon={faCartShopping} className="button" />
                     </button>
-                    <button title="Añadir a favoritos">
+                    <button title="Añadir a favoritos" onClick={handleAddToFavorites}>
                         <FontAwesomeIcon icon={faHeart} className="button" />
                     </button>
                     <Link to={`/productdetail/${product._id || product.id}`} className="icon-link" title="Ver detalle">

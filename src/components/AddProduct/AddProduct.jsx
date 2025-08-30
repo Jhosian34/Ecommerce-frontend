@@ -6,7 +6,6 @@ import './AddProduct.css';
 
 const API_URL = import.meta.env.VITE_SERVER_API;
 
-
 export default function AddProduct({ onProductAdded }) {
     const [form, setForm] = useState({
         name: '',
@@ -31,7 +30,7 @@ export default function AddProduct({ onProductAdded }) {
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === 'image') {
-            setForm({ ...form, image: files[0] });
+            setForm({ ...form, image: files && files[0] ? files[0] : null });
         } else {
             setForm({ ...form, [name]: value });
         }
@@ -40,13 +39,15 @@ export default function AddProduct({ onProductAdded }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('Archivo que se va a subir:', form.image);
-
-        const requiredFields = ['name', 'price', 'date', 'image', 'description', 'category'];
+        const requiredFields = ['name', 'price', 'date', 'description', 'category'];
         const emptyFields = requiredFields.filter(
-            (field) =>
-                !form[field] || (typeof form[field] === 'string' && form[field].trim() === '')
+            (field) => !form[field] || (typeof form[field] === 'string' && form[field].trim() === '')
         );
+
+        if (!form.image) {
+            Swal.fire('Error', 'Por favor selecciona una imagen.', 'error');
+            return;
+        }
 
         if (emptyFields.length > 0) {
             Swal.fire('Error', 'Por favor completa todos los campos antes de guardar.', 'error');
@@ -62,19 +63,18 @@ export default function AddProduct({ onProductAdded }) {
         formData.append('name', form.name);
         formData.append('price', form.price);
         formData.append('description', form.description);
-        formData.append('file', form.image); 
+        formData.append('file', form.image);
         formData.append('category', form.category);
-        formData.append('date', Math.floor(new Date(form.date).getTime() / 1000));
-
+        formData.append('date', Math.floor(new Date(form.date).getTime() / 1000)); // Unix timestamp en segundos
 
         try {
             const token = localStorage.getItem('token');
 
             await axios.post(`${API_URL}/products`, formData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
             Swal.fire('Éxito', 'Producto agregado correctamente', 'success');
@@ -108,6 +108,7 @@ export default function AddProduct({ onProductAdded }) {
                             onChange={handleChange}
                             rows={4}
                             style={{ resize: 'vertical', width: '100%' }}
+                            required
                         />
                     ) : (
                         <input
@@ -115,25 +116,27 @@ export default function AddProduct({ onProductAdded }) {
                             value={form[key]}
                             onChange={handleChange}
                             type={key === 'date' ? 'date' : 'text'}
+                            required
                         />
                     )}
                 </div>
             ))}
 
             <div>
-                <label>Imagen:</label>
+                <label>{etiquetas.image}:</label>
                 <input
                     name="image"
                     type="file"
                     accept="image/*"
                     onChange={handleChange}
                     className="styled-file-input"
+                    required
                 />
             </div>
 
             <div>
-                <label>Categoría:</label>
-                <select name="category" value={form.category} onChange={handleChange}>
+                <label>{etiquetas.category}:</label>
+                <select name="category" value={form.category} onChange={handleChange} required>
                     <option value="">Selecciona una categoría</option>
                     <option value="electrodoméstico">Electrodoméstico</option>
                     <option value="iluminación">Iluminación</option>

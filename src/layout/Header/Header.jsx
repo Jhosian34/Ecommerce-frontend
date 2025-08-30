@@ -68,7 +68,7 @@ export default function Header() {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:3000/avatars/upload/${userId}`, {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_API}/avatars/upload/${userId}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -80,7 +80,7 @@ export default function Header() {
 
             if (res.ok) {
 
-                const relativePath = data.imageUrl.replace('http://localhost:3000', '');
+                const relativePath = data.imageUrl.replace(import.meta.env.VITE_SERVER_API, '');
                 const updatedUser = { ...currentUser, avatar: relativePath };
                 updateUser(updatedUser);
 
@@ -171,7 +171,7 @@ export default function Header() {
                             currentUser?.avatar
                                 ? currentUser.avatar.startsWith('http')
                                     ? currentUser.avatar
-                                    : `http://localhost:3000${currentUser.avatar}`
+                                    : `${import.meta.env.VITE_SERVER_API}${currentUser.avatar}`
                                 : userImg
                         }
                         alt="user-profile"

@@ -28,7 +28,7 @@ export default function Register() {
         if (avatar) formData.append('avatar', avatar);
 
         try {
-            await axios.post('http://localhost:3000/users/register', formData, {
+            await axios.post(`${import.meta.env.VITE_SERVER_API}/users/register`, formData, {
                 headers: {
                     'Accept': 'application/json',
                 }
@@ -45,9 +45,21 @@ export default function Register() {
     const handleAvatarClick = () => inputFileRef.current?.click();
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) setAvatar(file);
-    };
+    const file = e.target.files[0];
+    if (file) {
+        if (!file.type.startsWith('image/')) {
+            Swal.fire('Archivo inválido', 'Por favor seleccioná una imagen válida', 'error');
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            Swal.fire('Archivo muy grande', 'La imagen no debe superar los 2MB', 'warning');
+            return;
+        }
+
+        setAvatar(file);
+    }
+};
 
     return (
         <main className="main-container">

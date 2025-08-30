@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import './Cart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faTrashRestore } from '@fortawesome/free-solid-svg-icons';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { faTrashAlt, faTrashRestore, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+
+const API_URL = import.meta.env.VITE_SERVER_API;
 
 export default function Cart() {
     const { cart, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
+    const [loading, setLoading] = useState(false);
+    const nav = useNavigate();
 
     const handleClearCart = () => {
         Swal.fire({
@@ -28,62 +31,52 @@ export default function Cart() {
         });
     };
 
+    const handleCheckout = async () => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            const response = await fetch(`${API_URL}/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    user: user._id,
+                    items: cart.map(item => ({
+                        productId: item._id || item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        image: item.image
+                    })),
+                    total: totalPrice,
+                    status: "pending"
+                }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || "Error desconocido");
+            }
+
+            await response.json();
+            Swal.fire("¡Compra realizada!", "Tu orden ha sido registrada con éxito.", "success");
+            clearCart();
+            nav('/orders');
+        } catch (error) {
+            console.error("Error al procesar la compra:", error);
+            Swal.fire("Error", error.message || "Hubo un problema al procesar la compra.", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (cart.length === 0) {
         return <p className="empty-cart-message">El carrito está vacío.</p>;
     }
-
-    const handleCheckout = async () => {
-    try {
-        const token = localStorage.getItem("token");
-        const user = JSON.parse(localStorage.getItem("user"));
-        const response = await fetch("http://localhost:3000/orders", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                user: user._id,
-                items: cart.map(item => ({
-                    productId: item._id || item.id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity,
-                    image: item.image
-                })),
-                total: totalPrice,
-                status: "pending"
-            }),
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(JSON.stringify(error));
-        }
-
-        const result = await response.json();
-        Swal.fire("¡Compra realizada!", "Tu orden ha sido registrada con éxito.", "success");
-        clearCart();
-
-        const ordersResponse = await fetch("http://localhost:3000/orders", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        if (!ordersResponse.ok) {
-            throw new Error("Error al obtener las órdenes");
-        }
-
-        const allOrders = await ordersResponse.json();
-        console.log("Órdenes desde la base de datos:", allOrders);
-
-    } catch (error) {
-        console.error("Error al procesar la compra:", error);
-        Swal.fire("Error", "Hubo un problema al procesar la compra.", "error");
-    }
-};
 
     return (
         <div className="cart-container">
@@ -92,7 +85,7 @@ export default function Cart() {
                 {cart.map(product => (
                     <li key={product._id || product.id} className="cart-item">
                         <img
-                            src={product.image?.startsWith('http') ? product.image : `http://localhost:3000/uploads/products/${product.image}`}
+                            src={product.image?.startsWith('http') ? product.image : `${API_URL}/uploads/products/${product.image}`}
                             alt={product.name}
                             className="cart-item-image"
                             onError={(e) => {
@@ -110,6 +103,7 @@ export default function Cart() {
                             className="remove-btn"
                             onClick={() => removeFromCart(product._id || product.id)}
                             title="Eliminar producto"
+                            disabled={loading}
                         >
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </button>
@@ -122,7 +116,12 @@ export default function Cart() {
                 <p><strong>Total a pagar:</strong> ${totalPrice.toFixed(2)}</p>
             </div>
 
-            <button className="clear-cart-btn" onClick={handleClearCart} title="Vaciar carrito">
+            <button
+                className="clear-cart-btn"
+                onClick={handleClearCart}
+                title="Vaciar carrito"
+                disabled={loading}
+            >
                 <FontAwesomeIcon icon={faTrashRestore} /> Vaciar carrito
             </button>
 
@@ -130,8 +129,9 @@ export default function Cart() {
                 className="checkout-btn"
                 onClick={handleCheckout}
                 title="Confirmar compra"
+                disabled={loading}
             >
-                Confirmar compra
+                {loading ? 'Procesando...' : 'Confirmar compra'}
             </button>
 
             <Link to="/" className="back-home-link">

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
@@ -9,17 +9,27 @@ export function UserProvider({ children }) {
         const storedUser = localStorage.getItem('user');
         return storedUser ? JSON.parse(storedUser) : null;
     });
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
+        }
+    }, [user]);
 
     const updateUser = (newUser) => {
-        setUser(newUser);
-        localStorage.setItem('user', JSON.stringify(newUser));
+        if (newUser && typeof newUser === 'object') {
+            setUser(newUser);
+        } else {
+            console.warn('updateUser recibió un valor inválido:', newUser);
+        }
     };
 
     const logoutUser = () => {
         setUser(null);
-        localStorage.removeItem('user');
         localStorage.removeItem('token');
         localStorage.removeItem('cart');
+        
     };
 
     return (

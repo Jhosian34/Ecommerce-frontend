@@ -21,7 +21,7 @@ export default function EditProduct() {
     const [imageFile, setImageFile] = useState(null);
 
     useEffect(() => {
-        axios.get(`https://ecommerce-backend-663o.onrender.com/products/${id}`)
+        axios.get(`${API_URL}/products/${id}`)
             .then(res => {
                 const data = res.data.product;
                 setForm({
@@ -141,7 +141,7 @@ export default function EditProduct() {
                             src={
                                 form.image?.startsWith('http')
                                     ? form.image
-                                    : `http://localhost:3000/uploads/products/${form.image}`
+                                    : `${API_URL}/uploads/products/${form.image}`
                             }
                             alt="Producto"
                             style={{ width: '100px', height: 'auto' }}

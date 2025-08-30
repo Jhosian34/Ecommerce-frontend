@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useCart } from '../../components/context/CartContext';
 
+const API_URL = import.meta.env.VITE_SERVER_API
+
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -15,7 +17,7 @@ export default function ProductDetail() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await axios.get(`http://localhost:3000/products/${id}`);
+        const res = await axios.get(`${API_URL}/products/${id}`);
         setProduct(res.data.product);
       } catch (error) {
         console.error('Error al cargar producto:', error);

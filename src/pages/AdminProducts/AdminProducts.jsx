@@ -7,6 +7,8 @@ import AddProduct from '../../components/AddProduct/AddProduct';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+const API_URL = import.meta.env.VITE_SERVER_API
+
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://ecommerce-backend-663o.onrender.com/products', {
+      const response = await axios.get(`${API_URL}/products`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -49,7 +51,7 @@ export default function AdminProducts() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://ecommerce-backend-663o.onrender.com/products/${id}`, {
+          .delete(`${API_URL}/products/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -102,7 +104,7 @@ export default function AdminProducts() {
                       src={
                         p.image?.startsWith('http')
                           ? p.image
-                          : `http://localhost:3000/uploads/products/${p.image}`
+                          : `${import.meta.env.VITE_SERVER_API}/uploads/products/${p.image}`
                       }
                       alt={p.name}
                       width="60"

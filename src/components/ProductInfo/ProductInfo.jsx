@@ -18,7 +18,7 @@ export default function ProductInfo({
 
     const handleQuantityChange = (e) => {
         const val = Number(e.target.value);
-        if (val >= 1) setQuantity(val);1042
+        if (val >= 1) setQuantity(val);
     };
 
     return (
@@ -30,7 +30,7 @@ export default function ProductInfo({
                             src={
                                 image?.startsWith('http')
                                     ? image
-                                    : `https://ecommerce-backend-663o.onrender.com/uploads/products/${image}`
+                                    : `${import.meta.env.VITE_SERVER_API}/uploads/products/${image}`
                             }
                             alt={name}
                             onError={(e) => {
