@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
 
     const imageUrl = product.image?.startsWith('http')
         ? product.image
-        :`${import.meta.env.VITE_SERVER_API}/uploads/${product.image}`;
+        :`${import.meta.env.VITE_SERVER_API}/uploads/products/${product.image}`;
 
     const handleAddToCart = () => {
         addToCart({ ...product, quantity: 1 });
