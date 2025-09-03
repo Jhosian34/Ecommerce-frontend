@@ -18,6 +18,7 @@ import Login from "./pages/Login/Login";
 import CartDisplay from './components/context/Cart';
 import AdminGuard from "./shared/guard/AdminGuard";
 import Profile from "./pages/Profile/Profile"
+import OrderSuccess from "./components/OrderSuccess/OrderSuccess";
 
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
                 <Route path="/ProductInfo/:id" element={<ProductInfo />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/cart" element={<CartDisplay />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
 
                 <Route path="*" element={<h1>Not Found Page</h1>} />
 

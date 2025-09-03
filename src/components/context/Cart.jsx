@@ -65,7 +65,7 @@ export default function Cart() {
             await response.json();
             Swal.fire("¡Compra realizada!", "Tu orden ha sido registrada con éxito.", "success");
             clearCart();
-            nav('/orders');
+            nav('/order-success');
         } catch (error) {
             console.error("Error al procesar la compra:", error);
             Swal.fire("Error", error.message || "Hubo un problema al procesar la compra.", "error");
