@@ -62,10 +62,10 @@ export default function Cart() {
                 throw new Error(error.message || "Error desconocido");
             }
 
-            await response.json();
+            const data = await response.json();
             Swal.fire("¡Compra realizada!", "Tu orden ha sido registrada con éxito.", "success");
             clearCart();
-            nav('/order-success');
+            nav('/order-success', { state: { order: data } });
         } catch (error) {
             console.error("Error al procesar la compra:", error);
             Swal.fire("Error", error.message || "Hubo un problema al procesar la compra.", "error");
