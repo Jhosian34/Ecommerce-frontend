@@ -35,6 +35,15 @@
     flex-wrap: wrap;
 }
 
+.order-items li {
+    font-size: 1rem;
+    margin-bottom: 20px; 
+    line-height: 1.6;
+    color: #333;
+}
+.order-items li:hover {
+    background-color: transparent;
+}
 .order-btn {
     padding: 12px 18px;
     border: none;
@@ -59,7 +68,7 @@
 }
 
 .btn-home {
-    background-color: var(--color-cuarto);
+    background-color: var(--color-primario);
 }
 
 .btn-home:hover {
