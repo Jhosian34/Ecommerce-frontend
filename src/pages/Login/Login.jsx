@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../components/context/UserContext'; // ajusta ruta si es necesario
+import { useUser } from '../../components/context/UserContext';
 import './Login.css'
+import { Link } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_SERVER_API;
 
@@ -60,6 +61,9 @@ export default function Login() {
                 />
                 <button className="btn" type="submit">Iniciar Sesión</button>
             </form>
+            <div className="forgot-password">
+        <Link to="/forgot-password">Forgot your password?</Link>
+    </div>
         </div>
     )
 }

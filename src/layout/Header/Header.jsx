@@ -27,8 +27,8 @@ export default function Header() {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                logoutUser();     
-                setCart([]);      
+                logoutUser();
+                setCart([]);
                 Swal.fire({
                     icon: 'success',
                     title: 'Sesión cerrada',
@@ -42,7 +42,7 @@ export default function Header() {
     };
 
     const handleClickAvatar = () => {
-        if(inputFileRef.current) inputFileRef.current.click();
+        if (inputFileRef.current) inputFileRef.current.click();
     };
 
     const handleFileChange = async (e) => {
@@ -54,14 +54,14 @@ export default function Header() {
         const userId = currentUser?._id || currentUser?.id;
 
         console.log('currentUser:', currentUser);
-    console.log('userId extraído:', userId);
+        console.log('userId extraído:', userId);
 
 
-    if (!userId) {
-        Swal.fire('Error', 'No se pudo obtener el ID del usuario', 'error');
-        return;
-    }
-    
+        if (!userId) {
+            Swal.fire('Error', 'No se pudo obtener el ID del usuario', 'error');
+            return;
+        }
+
 
 
         try {
@@ -153,11 +153,15 @@ export default function Header() {
                 <div className="header-right">
 
                     {currentUser ? (
-                        <button onClick={handleLogout} className="btn-logout">Logout</button>) : (
-                        <NavLink to="/Login" className="btn-login">Login</NavLink>
-                    )}
-                    {currentUser && (
-                        <div className='name-login'>{currentUser.name}</div>
+                        <>
+                            <button onClick={handleLogout} className="btn-logout">Logout</button>
+                            <div className='name-login'>{currentUser.name}</div>
+                        </>
+                    ) : (
+                        <div className="auth-buttons">
+                            <NavLink to="/Login" className="btn-login">Login</NavLink>
+                            <NavLink to="/Register" className="btn-signup">Sign Up</NavLink>
+                        </div>
                     )}
                     <NavLink to="/cart" className="cart-icon-container" style={{ position: 'relative' }}>
                         <FontAwesomeIcon icon={faCartShopping} size="lg" className="footer-icon" />

@@ -19,6 +19,8 @@ import CartDisplay from './components/context/Cart';
 import AdminGuard from "./shared/guard/AdminGuard";
 import Profile from "./pages/Profile/Profile"
 import OrderSuccess from "./components/OrderSuccess/OrderSuccess";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 
 
 export default function App() {
@@ -49,7 +51,11 @@ export default function App() {
                     </AdminGuard>
                 } />
                 <Route path="/ProductInfo/:id" element={<ProductInfo />} />
+
                 <Route path="/Login" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+
                 <Route path="/cart" element={<CartDisplay />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
 
